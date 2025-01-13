@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/bSend"
+        app:layout_constraintEnd_toEndOf="@+id/bSend"
+        app:layout_constraintStart_toStartOf="@+id/bSend">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Введите мощность" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Raspberry"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3C9CB5"
+        android:text="Список блютуз устройств"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/bConnect"
+        app:layout_constraintTop_toBottomOf="@+id/bConnect" />
+
+
+    <Button
+        android:id="@+id/bConnect"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/green"
+        android:text="Connect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvStatus" />
+
+    <Button
+        android:id="@+id/bSend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Отправить мощность"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/stopSend"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:src="@drawable/ic_stop"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="@+id/bList"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintStart_toStartOf="@+id/bList"
+        app:layout_constraintTop_toBottomOf="@+id/dataReciver"
+        app:layout_constraintVertical_bias="0.73"
+        app:layout_constraintWidth_percent="0.4" />
+
+    <Button
+        android:id="@+id/sendMaxValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/red"
+        android:text="отрпавить максимальную мощность"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/bList"
+        app:layout_constraintTop_toBottomOf="@+id/bList" />
+
+    <Button
+        android:id="@+id/dataReciver"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="старт создания и приема данных"
+        app:layout_constraintEnd_toEndOf="@+id/sendMaxValue"
+        app:layout_constraintStart_toStartOf="@+id/sendMaxValue"
+        app:layout_constraintTop_toBottomOf="@+id/sendMaxValue" />
+
+    <Button
+        android:id="@+id/bShowFullImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Показать картинку в новом окне"
+        app:layout_constraintBottom_toTopOf="@+id/maxValue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dataReciver" />
+    />
+
+    <TextView
+        android:id="@+id/maxValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="maxValue"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/stopSend"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dataReciver" />
+
+    <ImageView
+        android:id="@+id/imageGraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/stopSend"
+        app:layout_constraintEnd_toStartOf="@+id/maxValue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dataReciver"
+        tools:src="@tools:sample/avatars" />
+</androidx.constraintlayout.widget.ConstraintLayout>

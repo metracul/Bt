@@ -27,6 +27,7 @@ import com.google.android.material.snackbar.Snackbar
 class DeviceListFragment : Fragment(), ItemAdapter.Listener {
     private var preferences: SharedPreferences? = null
     private lateinit var itemAdapter: ItemAdapter
+    private lateinit var discoveryAdapter: ItemAdapter
     private var bAdapter: BluetoothAdapter? = null
     private lateinit var binding: FragmentListBinding
     private lateinit var btLauncher: ActivityResultLauncher<Intent>
@@ -48,7 +49,11 @@ class DeviceListFragment : Fragment(), ItemAdapter.Listener {
         }
         binding.imBluetoothSearch.setOnClickListener {
             try{
-                bAdapter?.startDiscovery()
+                if(bAdapter?.isEnabled == true){
+                    bAdapter?.startDiscovery()
+                    it.visibility = View.GONE
+                    binding.pbSearch.visibility = View.VISIBLE
+                }
             } catch (e: SecurityException){
             }
         }
@@ -62,8 +67,11 @@ class DeviceListFragment : Fragment(), ItemAdapter.Listener {
 
     private fun initRcViews() = with(binding){
         rcViewPaired.layoutManager = LinearLayoutManager(requireContext())
-        itemAdapter = ItemAdapter(this@DeviceListFragment)
+        rcViewSearch.layoutManager = LinearLayoutManager(requireContext())
+        itemAdapter = ItemAdapter(this@DeviceListFragment, false)
+        discoveryAdapter = ItemAdapter(this@DeviceListFragment, true)
         rcViewPaired.adapter = itemAdapter
+        rcViewSearch.adapter = discoveryAdapter
     }
 
     private fun getPairedDevices(){
@@ -73,12 +81,13 @@ class DeviceListFragment : Fragment(), ItemAdapter.Listener {
             deviceList.forEach{
                 list.add(
                     ListItem(
-                        it.name,
-                        it.address,
+                        it,
                         preferences?.getString(BluetoothConstants.MAC, "") == it.address
                     )
                 )
             }
+            binding.tvEmptyPaired.visibility = if(list.isEmpty()) View.VISIBLE else View.GONE
+            binding.tvEmptySearch.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
             itemAdapter.submitList(list)
         } catch (e: SecurityException){
 
@@ -147,23 +156,29 @@ class DeviceListFragment : Fragment(), ItemAdapter.Listener {
         editor?.apply()
     }
 
-    override fun onClick(device: ListItem) {
-        saveMac(device.mac)
+    override fun onClick(item: ListItem) {
+        saveMac(item.device.address)
     }
 
     private val bReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, intent: Intent?) {
             if(intent?.action == BluetoothDevice.ACTION_FOUND){
                 val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                val list = mutableSetOf<ListItem>()
+                list.addAll(discoveryAdapter.currentList)
+                if(device != null) list.add(ListItem(device, false))
+                discoveryAdapter.submitList(list.toList())
+                binding.tvEmptySearch.visibility = if(list.isEmpty()) View.VISIBLE else View.GONE
                 try{
                     Log.d("MyLog", "Device: ${device?.name}")
                 } catch (e: SecurityException){
 
                 }
             } else if(intent?.action == BluetoothDevice.ACTION_BOND_STATE_CHANGED){
-
+                getPairedDevices()
             } else if(intent?.action == BluetoothAdapter.ACTION_DISCOVERY_FINISHED){
-
+                binding.imBluetoothSearch.visibility = View.VISIBLE
+                binding.pbSearch.visibility = View.GONE
             }
         }
     }
